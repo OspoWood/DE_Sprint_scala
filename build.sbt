@@ -10,3 +10,4 @@ lazy val root = (project in file("."))
 libraryDependencies += "com.lihaoyi" %% "requests" % "0.7.1"
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1"
 libraryDependencies += "net.liftweb" %% "lift-json" % "3.5.0"
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.4"

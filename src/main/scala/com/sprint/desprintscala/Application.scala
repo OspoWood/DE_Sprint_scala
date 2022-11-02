@@ -1,13 +1,16 @@
 package com.sprint.desprintscala
 
 
-import com.sprint.desprintscala.clients.HttpClient
-import com.sprint.desprintscala.remote.impl.HHApiImpl
-import requests.Response
 
+import com.sprint.desprintscala.mappers.ItemJsonMapper
+import com.sprint.desprintscala.remote.HHApi
+
+import scala.io.StdIn.readLine
 import scala.language.postfixOps
 
 object Application extends App {
+
+
 
   println("\nTask a")
   processPhrase("Hello, Scala!")
@@ -43,10 +46,26 @@ object Application extends App {
   val upperSalaries = incrementSalaries(salariesWithAddedIndex, 7)
   println(upperSalaries)
 
-  val client = new HHApiImpl(new HttpClient())
-  println(client.getVacancy("scala"))
+
+  println("\nTask j")
+  val client =  HHApi(new ItemJsonMapper())
+  val gr = client.getVacancy("data%20engineer")
+  gr.filter(res=>res.salary!=null)
+//TODO
 
 
+  println("\nTask o.")
+  println(degreeOfTwo(10))
+
+  def degreeOfTwo(deg:Int):Int ={
+    def degree(base:Int, deg:Int):Int = {
+      if (deg<3){
+        base*base
+      }
+      else base * degree(base,deg - 1)
+    }
+    degree(2,deg)
+  }
 
 
   def processPhrase(phrase: String): Unit = {
