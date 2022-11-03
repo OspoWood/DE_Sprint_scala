@@ -18,4 +18,6 @@ case class Item(
   def this(id: String, name: String, salary:Salary, address:String) ={
     this(id,name, salary,address ,"","","",false,"","","")
   }
+
+
 }

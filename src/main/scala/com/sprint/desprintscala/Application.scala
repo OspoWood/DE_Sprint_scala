@@ -4,8 +4,10 @@ package com.sprint.desprintscala
 
 import com.sprint.desprintscala.mappers.ItemJsonMapper
 import com.sprint.desprintscala.remote.HHApi
+import com.sprint.desprintscala.service.{ConverterCurrency, ProcessVacancy}
+import com.sprint.desprintscala.types.{Junior, Middle, WorkingLevels}
 
-import scala.io.StdIn.readLine
+import scala.annotation.tailrec
 import scala.language.postfixOps
 
 object Application extends App {
@@ -24,8 +26,8 @@ object Application extends App {
   println(monthSalariesDeviation(listSalary))
 
   println("\nTask d")
-  val min = listSalary.min
-  val max = listSalary.max
+  val min = listSalary.min(Ordering.DeprecatedFloatOrdering)
+  val max = listSalary.max(Ordering.DeprecatedFloatOrdering)
   println(s"Min: $min,  Max: $max")
 
   println("\nTask e")
@@ -49,22 +51,30 @@ object Application extends App {
 
   println("\nTask j")
   val client =  HHApi(new ItemJsonMapper())
-  val gr = client.getVacancy("data%20engineer")
-  gr.filter(res=>res.salary!=null)
-//TODO
+  //{0-Russia, 1-Moscow,2-Spn}
+  val vacancyInHH = client.getVacancy("data%20engineer")
+  val mean = ProcessVacancy.getMeanSalary(vacancyInHH, new Middle())
+  println(f"Mean salary data engineer level Middle is $mean")
 
 
   println("\nTask o.")
-  println(degreeOfTwo(10))
+  println(degreeOfTwo(35))
+  println(degreeTailOfTwo(35))
+
+
 
   def degreeOfTwo(deg:Int):Int ={
-    def degree(base:Int, deg:Int):Int = {
-      if (deg<3){
-        base*base
-      }
-      else base * degree(base,deg - 1)
+    if(deg==0) 1 else 2 * degreeOfTwo(deg-1)
+  }
+
+
+  @tailrec
+  def degreeTailOfTwo(deg:Int, acc:Int=1):Int ={
+    if(deg==0){
+      acc
+    }else{
+      degreeTailOfTwo(deg-1, acc*2)
     }
-    degree(2,deg)
   }
 
 
@@ -81,7 +91,7 @@ object Application extends App {
   }
 
   def std(salaryList: Seq[Float]): Float = {
-    math.sqrt((salaryList.map(res => math.pow((res - mean(salaryList)), 2)).sum.toFloat) / salaryList.size).toFloat
+    math.sqrt((salaryList.map(res => math.pow((res - mean(salaryList)), 2)).sum(Numeric.DoubleIsFractional).toFloat) / salaryList.size).toFloat
   }
 
   def mean(salaryList: Seq[Float]): Float = {
