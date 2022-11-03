@@ -2,8 +2,8 @@ package com.sprint.desprintscala.types
 
 sealed class WorkingLevels()
 
-sealed class Junior extends WorkingLevels
+final class Junior extends WorkingLevels
 
-sealed class Middle extends WorkingLevels
+final class Middle extends WorkingLevels
 
-sealed class Senior extends WorkingLevels
+final class Senior extends WorkingLevels
